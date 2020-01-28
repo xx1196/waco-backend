@@ -5,15 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Mail\UserCreatedMail;
 use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends ApiController
 {
@@ -95,13 +89,9 @@ class UserController extends ApiController
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy($user)
+    public function destroy(User $user)
     {
-        $user = User::withTrashed()
-            ->whereId($user)
-            ->first();
-
-        $user->forceDelete();
+        $user->delete();
 
         return $this->showOne($user, "El usuario $user->name se ha eliminado de forma permanente con éxito");
     }
